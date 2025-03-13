@@ -63,3 +63,19 @@ export const Route = router;
 export const request = require('./lib/request');
 export const response = require('./lib/response');
 export const utils = Utils;
+
+export const Request = req => {
+    const requestObj = Object.create(request);
+    requestObj.req = req;
+    return requestObj;
+};
+
+export const Response = (req, res) => {
+    const requestObj = Object.create(request);
+    const responseObj = Object.create(response);
+    requestObj.req = responseObj.req = req;
+    requestObj.res = responseObj.res = res;
+    request.response = responseObj;
+    requestObj.request = requestObj;
+    return responseObj;
+};
