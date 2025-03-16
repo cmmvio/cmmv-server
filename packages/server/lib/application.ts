@@ -592,6 +592,23 @@ export class Application extends EventEmitter {
             }
         };
 
+        // Cache cleanup
+        if (options.cache) {
+            setInterval(() => {
+                if (
+                    app.cachedRoutes &&
+                    Object.keys(app.cachedRoutes).length > 0
+                ) {
+                    app.cachedRoutes = Object.keys(app.cachedRoutes)
+                        .filter(key => app.cachedRoutes[key].ttl > Date.now())
+                        .reduce((acc, key) => {
+                            acc[key] = app.cachedRoutes[key];
+                            return acc;
+                        }, {});
+                }
+            }, options.cacheTTL);
+        }
+
         for (const method in app)
             if (!server[method]) server[method] = app[method];
 

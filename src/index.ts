@@ -31,7 +31,7 @@ process.on('SIGINT', async () => {
 
     app.use(serverStatic('public'));
     app.use(cors());
-    app.use(etag({ algorithm: 'fnv1a' }));
+    app.use(etag({ algorithm: 'murmurhash' }));
     app.use(cookieParser());
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ limit: '50mb', extended: true }));
