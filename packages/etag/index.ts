@@ -14,6 +14,8 @@
 
 import { createHash } from 'node:crypto';
 import { fnv1a } from './fnv1a';
+import * as MurmurHash3 from 'imurmurhash';
+import { buffer } from 'node:stream/consumers';
 
 export interface ETagOptions {
     algorithm?: string;
@@ -43,6 +45,7 @@ export class EtagMiddleware {
             this.options.algorithm,
             this.options.weak,
         );
+
         let etag = res.getHeader('etag');
         let newPayload;
 
@@ -76,6 +79,12 @@ export class EtagMiddleware {
         if (algorithm === 'fnv1a')
             return payload => prefix + fnv1a(payload).toString(36) + '"';
 
+        if (algorithm === 'murmurhash')
+            return payload =>
+                prefix +
+                MurmurHash3(payload).result().toString(16).padStart(8, '0') +
+                '"';
+
         return payload =>
             prefix +
             createHash(algorithm).update(payload).digest('base64') +
@@ -84,6 +93,7 @@ export class EtagMiddleware {
 
     validateAlgorithm(algorithm) {
         if (algorithm === 'fnv1a') return true;
+        if (algorithm === 'murmurhash') return true;
 
         try {
             createHash(algorithm);

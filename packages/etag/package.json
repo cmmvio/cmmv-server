@@ -22,5 +22,11 @@
         "middleware"
     ],
     "homepage": "https://cmmv.io",
-    "gitHead": "d284a6c25a70c0e99d6e3588c5b3a664e17443d1"
+    "gitHead": "d284a6c25a70c0e99d6e3588c5b3a664e17443d1",
+    "dependencies": {
+        "imurmurhash": "^0.1.4"
+    },
+    "devDependencies": {
+        "@types/imurmurhash": "^0.1.4"
+    }
 }

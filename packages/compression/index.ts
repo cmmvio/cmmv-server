@@ -32,6 +32,7 @@ import * as http from 'node:http';
 import * as zlib from 'node:zlib';
 import * as crypto from 'node:crypto';
 import { Readable } from 'node:stream';
+import { Buffer } from 'node:buffer';
 
 export type CompressionOptions = zlib.ZlibOptions & {
     threshold?: number;
@@ -101,7 +102,9 @@ export class CompressionMiddleware {
                     res.remove('Content-Length');
 
                     const compressedBuffer = await this.compressData(
-                        Buffer.from(payload),
+                        typeof payload === 'string'
+                            ? Buffer.from(payload)
+                            : (payload as Buffer),
                         stream,
                     );
 

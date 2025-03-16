@@ -1,8 +1,8 @@
 import * as http from 'node:http';
 import * as https from 'node:https';
 import * as path from 'node:path';
-import * as crypto from 'node:crypto';
 import { EventEmitter } from 'node:events';
+import * as MurmurHash3 from 'imurmurhash';
 
 import {
     CM_ERR_HTTP2_INVALID_VERSION,
@@ -43,7 +43,6 @@ import { Router } from './router';
 import request from './request';
 import response from './response';
 import View from './view';
-import { fnv1a } from './fnv1a';
 
 import { utilsMerge, setPrototypeOf } from '../utils';
 
@@ -549,10 +548,13 @@ export class Application extends EventEmitter {
 
             if (cache && req.method === 'GET') {
                 let cacheKey = req.query
-                    ? `${req.method}:${req.url}?${JSON.stringify(req.query)}`
+                    ? `${req.method}:${req.url}?${new URLSearchParams(req.query).toString()}`
                     : `${req.method}:${req.url}`;
 
-                cacheKey = fnv1a(cacheKey).toString(36);
+                cacheKey = MurmurHash3(cacheKey)
+                    .result()
+                    .toString(16)
+                    .padStart(8, '0');
                 const cachedRoute = this.cachedRoutes[cacheKey] ?? null;
                 const ttl = options.cacheTTL;
 
@@ -574,10 +576,13 @@ export class Application extends EventEmitter {
 
             if (cache && req.method === 'GET') {
                 let cacheKey = req.query
-                    ? `${req.method}:${req.url}?${JSON.stringify(req.query)}`
+                    ? `${req.method}:${req.url}?${new URLSearchParams(req.query).toString()}`
                     : `${req.method}:${req.url}`;
 
-                cacheKey = fnv1a(cacheKey).toString(36);
+                cacheKey = MurmurHash3(cacheKey)
+                    .result()
+                    .toString(16)
+                    .padStart(8, '0');
                 const cachedRoute = this.cachedRoutes[cacheKey] ?? null;
 
                 if (cachedRoute && cachedRoute.ttl > Date.now())
