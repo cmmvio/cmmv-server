@@ -1,6 +1,7 @@
 import * as http from 'node:http';
 import * as https from 'node:https';
 import * as path from 'node:path';
+import * as crypto from 'node:crypto';
 import { EventEmitter } from 'node:events';
 
 import {
@@ -53,6 +54,8 @@ export class Application extends EventEmitter {
 
     response: any;
 
+    options: any;
+
     constructor() {
         super();
         this.request = request;
@@ -82,6 +85,10 @@ export class Application extends EventEmitter {
             options.joinDuplicateHeaders === true,
         );
 
+        //Internal cache
+        options.cache = Boolean(options.cache === true) || !options.cache;
+        options.cacheTTL = options.cacheTTL || 5000;
+
         return options;
     }
 
@@ -96,6 +103,7 @@ export class Application extends EventEmitter {
             engines: Object.create(null),
             settings: Object.create(null),
             locals: Object.create(null),
+            cachedRoutes: Object.create(null),
             mountpath: '/',
         };
 
@@ -535,6 +543,55 @@ export class Application extends EventEmitter {
             }
         };
 
+        app.createCache = function createCache(req, res, payload) {
+            const cache = options.cache;
+
+            if (cache && req.method === 'GET') {
+                let cacheKey = req.query
+                    ? `${req.method}:${req.url}?${JSON.stringify(req.query)}`
+                    : `${req.method}:${req.url}`;
+
+                cacheKey = crypto
+                    .createHash('sha256')
+                    .update(cacheKey)
+                    .digest('hex');
+                const cachedRoute = this.cachedRoutes[cacheKey] ?? null;
+                const ttl = options.cacheTTL;
+
+                if (
+                    (cachedRoute && cachedRoute.ttl < Date.now()) ||
+                    !cachedRoute
+                ) {
+                    this.cachedRoutes[cacheKey] = {
+                        ttl: Date.now() + ttl,
+                        headers: res.getHeaders(),
+                        payload: payload,
+                    };
+                }
+            }
+        };
+
+        app.getCache = function getCache(req) {
+            const cache = options.cache;
+
+            if (cache && req.method === 'GET') {
+                let cacheKey = req.query
+                    ? `${req.method}:${req.url}?${JSON.stringify(req.query)}`
+                    : `${req.method}:${req.url}`;
+
+                cacheKey = crypto
+                    .createHash('sha256')
+                    .update(cacheKey)
+                    .digest('hex');
+                const cachedRoute = this.cachedRoutes[cacheKey] ?? null;
+
+                if (cachedRoute && cachedRoute.ttl > Date.now())
+                    return cachedRoute;
+
+                return null;
+            }
+        };
+
         for (const method in app)
             if (!server[method]) server[method] = app[method];
 
@@ -591,6 +648,8 @@ export class Application extends EventEmitter {
 
         options = this.processOptions(options || {});
 
+        this.options = options;
+
         if (options.serverFactory) {
             server = options.serverFactory(this._handler, options);
         } else if (options.http2) {
@@ -636,6 +695,14 @@ export class Application extends EventEmitter {
     }
 
     private async _handler(this: any, req, res) {
+        const cache = this.getCache(req);
+
+        if (cache) {
+            res.writeHead(200, cache.headers);
+            res.end(cache.payload);
+            return;
+        }
+
         this.route(req.method, req.url)
             .then(async route => {
                 const request = Object.create(this.request);

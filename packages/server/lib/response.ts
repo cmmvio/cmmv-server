@@ -328,6 +328,8 @@ function onSendEnd(response, payload) {
     if (response.req.method.toLowerCase() !== 'head')
         response.res.write(payload);
 
+    response.app.app.createCache(response.req, response.res, payload);
+
     response.res.end();
 }
 
