@@ -82,6 +82,8 @@ export class CorsMiddleware {
         } else {
             headers.push(this.configureOrigin(this.options, request));
             headers.push(this.configureCredentials(this.options));
+            headers.push(this.configureMethods(this.options));
+            headers.push(this.configureAllowedHeaders(this.options, request));
             headers.push(this.configureExposedHeaders(this.options));
             this.applyHeaders(headers, res);
 
