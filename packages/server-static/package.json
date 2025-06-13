@@ -1,6 +1,6 @@
 {
   "name": "@cmmv/server-static",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Plugin to serve stateful files in addition to the CMMV HTTP server",
   "publishConfig": {
     "access": "public"
