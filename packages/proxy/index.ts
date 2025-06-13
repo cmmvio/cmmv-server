@@ -60,14 +60,16 @@ export class ProxyMiddleware {
                 }
             }
 
+            const originalReq = req.req || req;
+
             const requestOptions = {
                 hostname: this.targetUrl.hostname,
                 port:
                     this.targetUrl.port ||
                     (this.targetUrl.protocol === 'https:' ? 443 : 80),
                 path: targetPath,
-                method: req.method,
-                headers: { ...req.headers },
+                method: originalReq.method,
+                headers: { ...originalReq.headers },
                 timeout: this.options.timeout,
             };
 
@@ -76,10 +78,6 @@ export class ProxyMiddleware {
 
             if (this.options.changeOrigin)
                 requestOptions.headers.host = this.targetUrl.host;
-
-            if (!req.body) {
-                delete requestOptions.headers['content-length'];
-            }
 
             const httpModule =
                 this.targetUrl.protocol === 'https:' ? https : http;
@@ -120,7 +118,9 @@ export class ProxyMiddleware {
                 reject(error);
             });
 
-            if (req.body) {
+            if (originalReq.readable && originalReq !== req) {
+                originalReq.pipe(proxyReq);
+            } else if (req.body) {
                 let bodyData;
 
                 if (typeof req.body === 'string') {
@@ -141,9 +141,10 @@ export class ProxyMiddleware {
                     requestOptions.headers['content-length'] = contentLength;
                     proxyReq.write(bodyData);
                 }
+                proxyReq.end();
+            } else {
+                proxyReq.end();
             }
-
-            proxyReq.end();
         });
     }
 
