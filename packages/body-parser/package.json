@@ -1,6 +1,6 @@
 {
   "name": "@cmmv/body-parser",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "Body-parser-like plugin implemented for CMMV server",
   "publishConfig": {
     "access": "public"
