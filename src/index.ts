@@ -7,6 +7,7 @@ import cors from '@cmmv/cors';
 import cookieParser from '@cmmv/cookie-parser';
 import compression from '@cmmv/compression';
 import helmet from '@cmmv/helmet';
+import proxy from '@cmmv/proxy';
 
 process.on('SIGINT', async () => {
     await Inspector.stop();
@@ -42,7 +43,8 @@ process.on('SIGINT', async () => {
                 useDefaults: false,
                 directives: {
                     defaultSrc: ["'self'"],
-                    scriptSrc: ["'self'", 'example.com'],
+                    scriptSrc: ["'self'", "'unsafe-inline'", 'example.com'],
+                    styleSrc: ["'self'", "'unsafe-inline'"],
                     objectSrc: ["'none'"],
                     upgradeInsecureRequests: [],
                 },
@@ -51,6 +53,29 @@ process.on('SIGINT', async () => {
     );
 
     app.set('view engine', 'pug');
+
+    // Definindo rotas específicas para o proxy
+    app.get(
+        '/proxy',
+        proxy({
+            target: 'http://httpbin.org',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/proxy': '',
+            },
+        }),
+    );
+
+    app.get(
+        '/proxy/*',
+        proxy({
+            target: 'http://httpbin.org',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/proxy': '',
+            },
+        }),
+    );
 
     app.get('/view', (req, res) => {
         res.render('index', { title: 'Hey', message: 'Hello there!' });

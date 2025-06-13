@@ -30,7 +30,7 @@
         "lib": ["esnext", "dom"],
         "types": ["node", "mocha"],
         "paths": {
-            "*": ["node_modules/*", "packages/*"],            
+            "*": ["node_modules/*", "packages/*"],
             "@cmmv/body-parser": ["packages/body-parser"],
             "@cmmv/body-parser/*": ["packages/body-parser/*"],
             "@cmmv/compression": ["packages/compression"],
@@ -46,7 +46,9 @@
             "@cmmv/server": ["packages/server"],
             "@cmmv/server/*": ["packages/server/*"],
             "@cmmv/server-static": ["packages/server-static"],
-            "@cmmv/server-static/*": ["packages/server-static/*"]
+            "@cmmv/server-static/*": ["packages/server-static/*"],
+            "@cmmv/proxy": ["packages/proxy"],
+            "@cmmv/proxy/*": ["packages/proxy/*"]
         }
     },
     "include": ["packages/**/*", "src/**/*.ts"],

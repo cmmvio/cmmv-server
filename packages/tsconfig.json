@@ -8,6 +8,7 @@
         { "path": "./etag/tsconfig.build.json" },
         { "path": "./helmet/tsconfig.build.json" },
         { "path": "./server/tsconfig.build.json" },
-        { "path": "./server-static/tsconfig.build.json" }
+        { "path": "./server-static/tsconfig.build.json" },
+        { "path": "./proxy/tsconfig.build.json" }
     ]
 }

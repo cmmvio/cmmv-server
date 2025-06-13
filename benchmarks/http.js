@@ -10,4 +10,6 @@ const requestListener = (req, res) => {
 };
 
 const server = http.createServer(requestListener);
-server.listen(5002);
+server.listen(5002, "0.0.0.0", () => {
+    console.log("Server is running on http://0.0.0.0:5002");
+});
