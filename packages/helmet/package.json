@@ -1,6 +1,6 @@
 {
     "name": "@cmmv/helmet",
-    "version": "0.9.5",
+    "version": "0.10.0",
     "description": "Helmet plugin for CMMV HTTP server",
     "publishConfig": {
         "access": "public"

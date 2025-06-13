@@ -1,6 +1,6 @@
 {
     "name": "@cmmv/proxy",
-    "version": "0.9.5",
+    "version": "0.10.0",
     "description": "Proxy plugin for CMMV HTTP server",
     "publishConfig": {
         "access": "public"
@@ -23,7 +23,6 @@
         "cmmv"
     ],
     "homepage": "https://cmmv.io",
-    "dependencies": {},
     "devDependencies": {
         "@types/node": "^22.6.1"
     }
