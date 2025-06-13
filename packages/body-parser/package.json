@@ -1,44 +1,44 @@
 {
-    "name": "@cmmv/body-parser",
-    "version": "0.10.0",
-    "description": "Body-parser-like plugin implemented for CMMV server",
-    "publishConfig": {
-        "access": "public"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/cmmvio/cmmv-server.git"
-    },
-    "author": "Andre Ferreira",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/cmmvio/cmmv-server/issues"
-    },
-    "homepage": "https://cmmv.io",
-    "keywords": [
-        "cmmv",
-        "body-parser",
-        "express",
-        "connect",
-        "middleware"
-    ],
-    "dependencies": {
-        "async_hooks": "^1.0.0",
-        "bytes": "^3.1.2",
-        "content-type": "^1.0.5",
-        "destroy": "^1.2.0",
-        "iconv-lite": "^0.6.3",
-        "on-finished": "^2.4.1",
-        "raw-body": "^3.0.0",
-        "type-is": "^1.6.18",
-        "unpipe": "^1.0.0"
-    },
-    "devDependencies": {
-        "@types/destroy": "^1.0.3",
-        "@types/iconv-lite": "^0.0.1",
-        "@types/on-finished": "^2.3.4",
-        "@types/raw-body": "^2.3.0",
-        "@types/type-is": "^1.6.6"
-    },
-    "gitHead": "d284a6c25a70c0e99d6e3588c5b3a664e17443d1"
+  "name": "@cmmv/body-parser",
+  "version": "0.10.1",
+  "description": "Body-parser-like plugin implemented for CMMV server",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmmvio/cmmv-server.git"
+  },
+  "author": "Andre Ferreira",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cmmvio/cmmv-server/issues"
+  },
+  "homepage": "https://cmmv.io",
+  "keywords": [
+    "cmmv",
+    "body-parser",
+    "express",
+    "connect",
+    "middleware"
+  ],
+  "dependencies": {
+    "async_hooks": "^1.0.0",
+    "bytes": "^3.1.2",
+    "content-type": "^1.0.5",
+    "destroy": "^1.2.0",
+    "iconv-lite": "^0.6.3",
+    "on-finished": "^2.4.1",
+    "raw-body": "^3.0.0",
+    "type-is": "^1.6.18",
+    "unpipe": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/destroy": "^1.0.3",
+    "@types/iconv-lite": "^0.0.1",
+    "@types/on-finished": "^2.3.4",
+    "@types/raw-body": "^2.3.0",
+    "@types/type-is": "^1.6.6"
+  },
+  "gitHead": "d284a6c25a70c0e99d6e3588c5b3a664e17443d1"
 }
