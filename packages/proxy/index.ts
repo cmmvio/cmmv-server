@@ -77,7 +77,10 @@ export class ProxyMiddleware {
             if (this.options.changeOrigin)
                 requestOptions.headers.host = this.targetUrl.host;
 
-            delete requestOptions.headers['content-length'];
+            if (!req.body) {
+                delete requestOptions.headers['content-length'];
+            }
+
             const httpModule =
                 this.targetUrl.protocol === 'https:' ? https : http;
 
@@ -118,10 +121,25 @@ export class ProxyMiddleware {
             });
 
             if (req.body) {
+                let bodyData;
+
                 if (typeof req.body === 'string') {
-                    proxyReq.write(req.body);
+                    bodyData = req.body;
+                } else if (Buffer.isBuffer(req.body)) {
+                    bodyData = req.body;
+                } else if (typeof req.body === 'object') {
+                    bodyData = JSON.stringify(req.body);
+                    if (!requestOptions.headers['content-type']) {
+                        requestOptions.headers['content-type'] = 'application/json';
+                    }
                 } else {
-                    proxyReq.write(JSON.stringify(req.body));
+                    bodyData = String(req.body);
+                }
+
+                if (bodyData) {
+                    const contentLength = Buffer.byteLength(bodyData, 'utf8');
+                    requestOptions.headers['content-length'] = contentLength;
+                    proxyReq.write(bodyData);
                 }
             }
 
