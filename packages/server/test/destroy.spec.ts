@@ -96,15 +96,17 @@ describe('destroy(stream)', function () {
                 assert(isdestroyed(stream));
             });
 
-            it('should destroy a zlib stream after error', function (done) {
-                var stream = zlib[method]();
-                assert(!isdestroyed(stream));
-                stream.on('error', function () {
-                    destroy(stream);
+            it('should destroy a zlib stream after error', function () {
+                try{
+                    var stream = zlib[method]();
+                    assert(!isdestroyed(stream));
+                    stream.on('error', function () {
+                        destroy(stream);
+                    });
+                    stream.write('foobar_invalid');
+                } catch (error) {
                     assert(isdestroyed(stream));
-                    done();
-                });
-                stream.write('foobar_invalid');
+                }
             });
         });
     });

@@ -18,7 +18,7 @@
 		"clean:packages": "find ./packages -name 'node_modules' -prune -o -type f \\( -name '*.d.ts' -o -name '*.js' \\) -exec rm -f {} +",
 		"clean": "pnpm run clean:tsfiles && pnpm run clean:packages > /dev/null 2>&1",
 		"format": "prettier \"**/*.ts\" \"packages/**/*.json\" --ignore-path ./.prettierignore --write && git status",
-		"test": "pnpm run build:test && pnpm run packages:move && NODE_ENV=test vitest && pnpm run clean",
+		"test": "pnpm run build:test && pnpm run packages:move && mocha --exit && pnpm run clean",
 		"test:dev": "mocha --exit -w --watch-files \"packages\" packages/**/*.spec.js",
 		"test:cov": "nyc mocha packages/**/*.spec.ts --reporter spec",
 		"lint": "concurrently 'pnpm run lint:packages' 'pnpm run lint:spec'",
@@ -160,7 +160,6 @@
 		"ts-node": "^10.9.2",
 		"tslib": "^2.8.1",
 		"typescript": "^5.8.3",
-		"vitest": "^3.2.3",
 		"wrk": "^1.2.1"
 	},
 	"dependencies": {

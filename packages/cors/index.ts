@@ -300,7 +300,7 @@ export const cors = function (options?: CorsOptions | Function) {
                 if (err) {
                     next(err);
                 } else {
-                    var corsOptions = assign({}, defaults, options);
+                    var corsOptions = Object.assign({}, defaults, options);
                     var originCallback = null;
 
                     if (
@@ -330,7 +330,8 @@ export const cors = function (options?: CorsOptions | Function) {
                             },
                         );
                     } else {
-                        next();
+                        middleware = new CorsMiddleware(corsOptions);
+                        middleware.process(req, res, next);
                     }
                 }
             });
