@@ -37,14 +37,14 @@ export class ProxyMiddleware {
     private targetUrl: url.UrlWithStringQuery;
 
     constructor(options: ProxyOptions) {
+        this.targetUrl = url.parse(options.target);
+
         this.options = {
             changeOrigin: true,
             timeout: 30000,
-            secure: true,
+            secure: this.targetUrl.protocol === 'https:',
             ...options,
         };
-
-        this.targetUrl = url.parse(this.options.target);
     }
 
     async process(req, res, next?) {

@@ -1,29 +1,29 @@
 {
-  "name": "@cmmv/proxy",
-  "version": "0.12.0",
-  "description": "Proxy plugin for CMMV HTTP server",
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cmmvio/cmmv-server.git"
-  },
-  "author": "Andre Ferreira",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cmmvio/cmmv-server/issues"
-  },
-  "keywords": [
-    "proxy",
-    "http-proxy",
-    "express",
-    "connect",
-    "middleware",
-    "cmmv"
-  ],
-  "homepage": "https://cmmv.io",
-  "devDependencies": {
-    "@types/node": "^22.6.1"
-  }
+    "name": "@cmmv/proxy",
+    "version": "0.12.0",
+    "description": "Proxy plugin for CMMV HTTP server",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/cmmvio/cmmv-server.git"
+    },
+    "author": "Andre Ferreira",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/cmmvio/cmmv-server/issues"
+    },
+    "keywords": [
+        "proxy",
+        "http-proxy",
+        "express",
+        "connect",
+        "middleware",
+        "cmmv"
+    ],
+    "homepage": "https://cmmv.io",
+    "devDependencies": {
+        "@types/node": "^22.6.1"
+    }
 }
