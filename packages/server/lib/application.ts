@@ -720,7 +720,22 @@ export class Application extends EventEmitter {
             return;
         }
 
-        this.route(req.method, req.url)
+        if(req.method === "OPTIONS") {
+            res.writeHead(204, {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                'Access-Control-Allow-Credentials': 'true',
+                'Access-Control-Max-Age': '86400',
+                'Content-Type': 'text/plain charset=UTF-8',
+                'Content-Length': '0',
+                'Date': new Date().toISOString(),
+                'Connection': 'close'
+            });
+            res.end();
+        }
+        else{
+            this.route(req.method, req.url)
             .then(async route => {
                 const request = Object.create(this.request);
                 request.routeOptions = route.store;
@@ -784,6 +799,7 @@ export class Application extends EventEmitter {
                 res.writeHead(404);
                 res.end('Not Found');
             });
+        }
     }
 
     private http2() {
