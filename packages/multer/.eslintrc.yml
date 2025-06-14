@@ -1,0 +1,10 @@
+root: true
+env:
+  node: true
+rules:
+  indent: ["error", 2, { "SwitchCase": 1 }]
+  quotes: ["error", "single"]
+  space-in-parens: ["error", "never"]
+parserOptions:
+  ecmaVersion: 2020
+  sourceType: "module"
