@@ -126,3 +126,6 @@ app.listen({ host, port })
 | koa                      | 2.16.0   | ✗      | 31031.0    | 31.72        | 5.53          |
 | express                  | 5.0.1    | ✓      | 12913.6    | 76.87        | 2.30          |
 
+
+## Changelog
+See [CHANGELOG.md](./CHANGELOG.md) for release notes.
