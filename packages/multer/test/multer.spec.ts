@@ -44,7 +44,7 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
     return Buffer.concat(buffers);
 }
 
-/*describe('multer', function () {
+describe('multer', function () {
     let tempDir: string;
 
     beforeEach(function() {
@@ -62,7 +62,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer({ dest: tempDir }));
 
         app.post('/upload', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 body: req.body,
                 files: req.files,
                 hasFiles: !!req.files
@@ -118,7 +119,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer({ dest: tempDir }));
 
         app.post('/multiple', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 filesCount: req.files ? Object.keys(req.files).length : 0,
                 files: req.files
             });
@@ -176,7 +178,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer({ dest: tempDir }));
 
         app.post('/form-only', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 body: req.body,
                 hasFiles: !!req.files,
                 files: req.files
@@ -235,7 +238,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer({ dest: tempDir }));
 
         app.post('/binary', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 uploaded: true,
                 files: req.files,
                 hasFiles: !!req.files
@@ -295,7 +299,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer({ dest: tempDir }));
 
         app.post('/large', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 success: true,
                 files: req.files,
                 hasFiles: !!req.files
@@ -355,7 +360,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer({ dest: tempDir }));
 
         app.post('/empty', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 processed: true,
                 files: req.files,
                 hasFiles: !!req.files
@@ -411,7 +417,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer({ dest: tempDir }));
 
         app.post('/special-chars', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 uploaded: true,
                 files: req.files,
                 hasFiles: !!req.files
@@ -474,7 +481,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer({ dest: tempDir }));
 
         app.post('/mixed', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 success: true,
                 files: req.files,
                 hasFiles: !!req.files
@@ -538,7 +546,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer({ dest: tempDir }));
 
         app.post('/no-multipart', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 processed: true,
                 files: req.files,
                 hasFiles: !!req.files
@@ -590,7 +599,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer()); // No dest specified
 
         app.post('/no-dest', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 uploaded: true,
                 files: req.files,
                 hasFiles: !!req.files
@@ -646,7 +656,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer({ dest: tempDir }));
 
         app.post('/malformed', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 processed: true,
                 files: req.files,
                 hasFiles: !!req.files
@@ -694,7 +705,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer({ dest: tempDir }));
 
         app.post('/no-filename', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 uploaded: true,
                 files: req.files,
                 hasFiles: !!req.files
@@ -755,13 +767,15 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.post('/direct-instance', async (req, res) => {
             try {
                 await multerInstance.process(req, res);
-                res.status(200).json({
+                res.status = 200;
+            res.json({
                     success: true,
                     files: req.files,
                     hasFiles: !!req.files
                 });
             } catch (error) {
-                res.status(500).json({ error: error.message });
+                res.status = 500;
+            res.json({ error: error.message });
             }
         });
 
@@ -813,7 +827,8 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         app.use(multer({ dest: tempDir }));
 
         app.post('/long-fields', (req, res) => {
-            res.status(200).json({
+            res.status = 200;
+            res.json({
                 processed: true,
                 files: req.files,
                 hasFiles: !!req.files
@@ -868,4 +883,3 @@ function createMultipartData(boundary: string, fields: any, files: any): Buffer 
         }).catch(done);
     });
 });
-*/

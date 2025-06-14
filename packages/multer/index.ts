@@ -43,15 +43,16 @@ export class MulterMiddleware {
     }
 
     cmmvMiddleware(req, res, payload, done) {
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>((resolve) => {
             const form = new IncomingForm({ uploadDir: this.options.dest });
 
-            form.parse(req.req, (err, fields, files) => {
+            form.parse(req.req || req, (err, fields, files) => {
                 if (err) {
-                    done && done(err);
+                    resolve(err);
                     return;
                 }
 
+                req.body = Object.assign({}, req.body, fields);
                 req.files = files?.file || files?.files || files;
                 resolve();
             });
@@ -59,10 +60,13 @@ export class MulterMiddleware {
     }
 }
 
-export default async function (options?: MulterOptions) {
-    const middleware = new MulterMiddleware(options);
-    return (req, res, next) => middleware.process(req, res, next);
-}
+export default Object.assign(
+    async function (options?: MulterOptions) {
+        const middleware = new MulterMiddleware(options);
+        return (req, res, next) => middleware.process(req, res, next);
+    },
+    { MulterMiddleware }
+);
 
 export const multer = function (options?: MulterOptions) {
     const middleware = new MulterMiddleware(options);
