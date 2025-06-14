@@ -1828,7 +1828,9 @@ export default {
     uncork() {
         this.res.uncork();
     },
-
+    write(chunk: any, encoding?: BufferEncoding, cb?: Function) {
+        return this.res.write(chunk, encoding, cb);
+    },
     writeEarlyHints(hints, callback) {
         this.res.writeEarlyHints(hints, callback);
         return this;
