@@ -48,7 +48,9 @@
             "@cmmv/server-static": ["packages/server-static"],
             "@cmmv/server-static/*": ["packages/server-static/*"],
             "@cmmv/proxy": ["packages/proxy"],
-            "@cmmv/proxy/*": ["packages/proxy/*"]
+            "@cmmv/proxy/*": ["packages/proxy/*"],
+            "@cmmv/multer": ["packages/multer"],
+            "@cmmv/multer/*": ["packages/multer/*"]
         }
     },
     "include": ["packages/**/*", "src/**/*.ts"],
