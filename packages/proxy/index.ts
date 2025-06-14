@@ -135,6 +135,11 @@ export class ProxyMiddleware {
                     ? https
                     : http;
 
+            if (this.targetUrl.protocol === 'https:') {
+                (requestOptions as https.RequestOptions).rejectUnauthorized =
+                    this.options.secure;
+            }
+
             const proxyReq = httpModule.request(requestOptions, proxyRes => {
                 res.statusCode = proxyRes.statusCode || 500;
 
