@@ -88,6 +88,7 @@ export class Application extends EventEmitter {
         //Internal cache
         options.cache = Boolean(options.cache === true) || !options.cache;
         options.cacheTTL = options.cacheTTL || 5000;
+        options.cors = options.cors || false;
 
         return options;
     }
@@ -721,17 +722,29 @@ export class Application extends EventEmitter {
         }
 
         if(req.method === "OPTIONS") {
-            res.writeHead(204, {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-                'Access-Control-Allow-Credentials': 'true',
-                'Access-Control-Max-Age': '86400',
-                'Content-Type': 'text/plain charset=UTF-8',
-                'Content-Length': '0',
-                'Date': new Date().toISOString(),
-                'Connection': 'close'
-            });
+
+            if(this.options.cors) {
+                res.writeHead(204, {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                    'Access-Control-Allow-Credentials': 'true',
+                    'Access-Control-Max-Age': '86400',
+                    'Content-Type': 'text/plain charset=UTF-8',
+                    'Content-Length': '0',
+                    'Date': new Date().toISOString(),
+                    'Connection': 'close'
+                });
+            }
+            else{
+                res.writeHead(204, {
+                    'Content-Type': 'text/plain charset=UTF-8',
+                    'Content-Length': '0',
+                    'Date': new Date().toISOString(),
+                    'Connection': 'close'
+                });
+            }
+
             res.end();
         }
         else{
