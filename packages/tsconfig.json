@@ -10,6 +10,6 @@
         { "path": "./server/tsconfig.build.json" },
         { "path": "./server-static/tsconfig.build.json" },
         { "path": "./proxy/tsconfig.build.json" },
-        //{ "path": "./multer/tsconfig.build.json" }
+        { "path": "./multer/tsconfig.build.json" }
     ]
 }
