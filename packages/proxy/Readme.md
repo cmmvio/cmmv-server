@@ -126,3 +126,35 @@ app.listen({ host, port })
 | koa                      | 2.16.0   | ✗      | 31031.0    | 31.72        | 5.53          |
 | express                  | 5.0.1    | ✓      | 12913.6    | 76.87        | 2.30          |
 
+## Proxy Options
+
+The proxy middleware now supports several hooks inspired by
+[express-http-proxy](https://github.com/villadora/express-http-proxy). These
+allow customization of both the outbound request and the returned response.
+
+- `filter(req, res)`: Skip proxying when the function returns `false`.
+- `proxyReqPathResolver(req)`: Resolve the path to use for the proxied request.
+- `proxyReqOptDecorator(opts, req)`: Modify the request options before sending.
+- `userResDecorator(proxyRes, data, req, res)`: Transform the response body.
+- `proxyErrorHandler(err, req, res, next)`: Custom error handler for proxy
+  failures.
+
+Example usage:
+
+```typescript
+import proxy from '@cmmv/proxy';
+
+app.use(
+    proxy({
+        target: 'https://example.com',
+        filter: (req) => req.method === 'GET',
+        proxyReqPathResolver: req => `/api${req.url}`,
+        userResDecorator: (proxyRes, data) => {
+            const body = JSON.parse(data.toString());
+            body.extra = true;
+            return JSON.stringify(body);
+        },
+    }),
+);
+```
+
