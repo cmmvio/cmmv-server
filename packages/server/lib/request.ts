@@ -40,9 +40,9 @@ export default {
      * @return {String}
      * @api public
      */
-    get query(): number {
-        const { parseurl, compileQueryParser } = require('../utils');
-        var querystring = parseurl(this).query;
+    get query(): Record<string, any> {
+        const { parseurl } = require('../utils');
+        const querystring = parseurl(this.req).query;
         return qs.parse(querystring);
     },
 
