@@ -7,12 +7,12 @@ import cmmv from '@cmmv/server';
 import multer from '..';
 
 function createServer(opts?: any) {
-    const app = cmmv({  });
+    const app = cmmv();
     app.use(multer(opts));
     app.post('/', (req, res) => {
         res.status(200).json({ body: req.body, files: req.files });
     });
-    return app.server;
+    return app;
 }
 
 /*describe('multer', function () {

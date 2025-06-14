@@ -43,16 +43,18 @@ export class MulterMiddleware {
     }
 
     cmmvMiddleware(req, res, payload, done) {
-        const form = new IncomingForm({ uploadDir: this.options.dest });
+        return new Promise<void>((resolve, reject) => {
+            const form = new IncomingForm({ uploadDir: this.options.dest });
 
-        form.parse(req, (err, fields, files) => {
-            if (err) {
-                done && done(err);
-                return;
-            }
-            req.body = Object.assign({}, req.body, fields);
-            req.files = files;
-            done && done();
+            form.parse(req.req, (err, fields, files) => {
+                if (err) {
+                    done && done(err);
+                    return;
+                }
+
+                req.files = files?.file || files?.files || files;
+                resolve();
+            });
         });
     }
 }

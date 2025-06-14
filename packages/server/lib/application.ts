@@ -516,6 +516,9 @@ export class Application extends EventEmitter {
             req,
             res,
         ) {
+            if(contentType.indexOf(";") !== -1)
+                contentType = contentType.split(";")[0];
+
             if (
                 this[kContentTypeParsers][contentType] &&
                 typeof this[kContentTypeParsers][contentType] === 'function'

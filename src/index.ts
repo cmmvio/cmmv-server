@@ -8,6 +8,7 @@ import cookieParser from '@cmmv/cookie-parser';
 import compression from '@cmmv/compression';
 import helmet from '@cmmv/helmet';
 import proxy from '@cmmv/proxy';
+import multer from '@cmmv/multer';
 
 process.on('SIGINT', async () => {
     await Inspector.stop();
@@ -37,6 +38,7 @@ process.on('SIGINT', async () => {
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ limit: '50mb', extended: true }));
     app.use(compression({ level: 6 }));
+    app.use(multer());
     app.use(
         helmet({
             contentSecurityPolicy: {
@@ -111,7 +113,12 @@ process.on('SIGINT', async () => {
         res.send('ok');
     });
 
-    app.listen({ host, port: 0 })
+    app.post('/upload', async (req, res) => {
+        console.log(req.files);
+        res.send('ok');
+    });
+
+    app.listen({ host, port })
         .then(server => {
             console.log(
                 `Listen on http://${server.address().address}:${server.address().port}`,
