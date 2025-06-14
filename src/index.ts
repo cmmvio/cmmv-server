@@ -111,7 +111,7 @@ process.on('SIGINT', async () => {
         res.send('ok');
     });
 
-    app.listen({ host, port })
+    app.listen({ host, port: 0 })
         .then(server => {
             console.log(
                 `Listen on http://${server.address().address}:${server.address().port}`,
