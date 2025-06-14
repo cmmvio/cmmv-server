@@ -63,7 +63,12 @@ export class ProxyMiddleware {
             if (next) next();
         } catch (error) {
             if (this.options.proxyErrorHandler) {
-                return this.options.proxyErrorHandler(error, req, res, next);
+                try {
+                    this.options.proxyErrorHandler(error, req, res, next);
+                    return;
+                } catch (handlerError) {
+                    console.error('Error in proxyErrorHandler:', handlerError);
+                }
             }
 
             console.error('Proxy error:', error);
@@ -99,6 +104,12 @@ export class ProxyMiddleware {
 
             const originalReq = req.req || req;
 
+            // Clean headers to avoid conflicts
+            const cleanHeaders = { ...originalReq.headers };
+            delete cleanHeaders['content-length'];
+            delete cleanHeaders['transfer-encoding'];
+            delete cleanHeaders['connection'];
+
             let requestOptions: http.RequestOptions = {
                 hostname: this.targetUrl.hostname,
                 port:
@@ -106,7 +117,7 @@ export class ProxyMiddleware {
                     (this.targetUrl.protocol === 'https:' ? 443 : 80),
                 path: targetPath,
                 method: originalReq.method,
-                headers: { ...originalReq.headers },
+                headers: cleanHeaders,
                 timeout: this.options.timeout,
             };
 
@@ -131,7 +142,7 @@ export class ProxyMiddleware {
             }
 
             const httpModule =
-                this.options.secure || this.targetUrl.protocol === 'https:'
+                this.targetUrl.protocol === 'https:'
                     ? https
                     : http;
 
@@ -144,7 +155,10 @@ export class ProxyMiddleware {
                 res.statusCode = proxyRes.statusCode || 500;
 
                 Object.keys(proxyRes.headers).forEach(key => {
-                    res.setHeader(key, proxyRes.headers[key]);
+                    // Skip transfer-encoding header to avoid conflicts with content-length
+                    if (key.toLowerCase() !== 'transfer-encoding') {
+                        res.setHeader(key, proxyRes.headers[key]);
+                    }
                 });
 
                 let responseData = Buffer.alloc(0);
@@ -200,7 +214,8 @@ export class ProxyMiddleware {
 
             proxyReq.setTimeout(this.options.timeout, () => {
                 proxyReq.destroy();
-                reject(new Error('Proxy timeout'));
+                const timeoutError = new Error('Proxy timeout');
+                reject(timeoutError);
             });
 
             proxyReq.on('error', error => {
@@ -228,7 +243,10 @@ export class ProxyMiddleware {
 
                 if (bodyData) {
                     const contentLength = Buffer.byteLength(bodyData, 'utf8');
-                    requestOptions.headers['content-length'] = contentLength;
+                    // Only set content-length if not already present
+                    if (!requestOptions.headers['content-length']) {
+                        requestOptions.headers['content-length'] = contentLength;
+                    }
                     proxyReq.write(bodyData);
                 }
                 proxyReq.end();

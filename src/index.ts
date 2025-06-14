@@ -62,6 +62,7 @@ process.on('SIGINT', async () => {
         proxy({
             target: 'http://httpbin.org',
             changeOrigin: true,
+            secure: false, // Explicitly set to false for HTTP targets
             pathRewrite: {
                 '^/proxy': '',
             },
@@ -73,6 +74,7 @@ process.on('SIGINT', async () => {
         proxy({
             target: 'http://httpbin.org',
             changeOrigin: true,
+            secure: false, // Explicitly set to false for HTTP targets
             pathRewrite: {
                 '^/proxy': '',
             },
