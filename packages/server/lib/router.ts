@@ -133,6 +133,9 @@ export class Router {
                 if (!this.optionsAllow.has(finalPath))
                     this.optionsAllow.set(finalPath, new Set<string>());
 
+                const allowed = this.optionsAllow.get(finalPath);
+                allowed?.add(method);
+
                 if (!this.router.hasRoute(method, finalPath)) {
                     this.router.on(method, finalPath, (req, res) => {}, {
                         stack: callbacks,
@@ -463,6 +466,19 @@ export class Router {
         >
     ) {
         this.mergeRoutes('UNSUBSCRIBE', path, ...callbacks);
+    }
+    /**
+     * Return list of registered routes.
+     */
+    public listRoutes() {
+        return this.registeredRoutes.slice();
+    }
+
+    /**
+     * Return allowed methods for the given path.
+     */
+    public allowedMethods(path: string) {
+        return this.optionsAllow.get(path) || new Set<string>();
     }
 
     public use(path: string, fn: Function) {

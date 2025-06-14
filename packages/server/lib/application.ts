@@ -126,6 +126,10 @@ export class Application extends EventEmitter {
             return this;
         };
 
+        app.routes = function routes() {
+            return app.router.listRoutes();
+        };
+
         /**
          * Proxy `Router#use()` to add middleware to the app router.
          * See Router#use() documentation for details.
@@ -721,31 +725,38 @@ export class Application extends EventEmitter {
             return;
         }
 
-        if(req.method === "OPTIONS") {
+        if (req.method === "OPTIONS") {
+            const allowed = this.router.allowedMethods
+                ? this.router.allowedMethods(req.url)
+                : this.router.optionsAllow.get(req.url);
 
-            if(this.options.cors) {
-                res.writeHead(204, {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-                    'Access-Control-Allow-Credentials': 'true',
-                    'Access-Control-Max-Age': '86400',
-                    'Content-Type': 'text/plain charset=UTF-8',
-                    'Content-Length': '0',
-                    'Date': new Date().toISOString(),
-                    'Connection': 'close'
-                });
+            if (allowed && allowed.size > 0) {
+                const allowHeader = Array.from(allowed).join(', ');
+                if (this.options.cors) {
+                    res.writeHead(204, {
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': allowHeader,
+                        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                        'Access-Control-Allow-Credentials': 'true',
+                        'Access-Control-Max-Age': '86400',
+                        Allow: allowHeader,
+                        'Content-Type': 'text/plain charset=UTF-8',
+                        'Content-Length': '0',
+                        Date: new Date().toISOString(),
+                        Connection: 'close',
+                    });
+                } else {
+                    res.writeHead(204, {
+                        Allow: allowHeader,
+                        'Content-Type': 'text/plain charset=UTF-8',
+                        'Content-Length': '0',
+                        Date: new Date().toISOString(),
+                        Connection: 'close',
+                    });
+                }
+                res.end();
+                return;
             }
-            else{
-                res.writeHead(204, {
-                    'Content-Type': 'text/plain charset=UTF-8',
-                    'Content-Length': '0',
-                    'Date': new Date().toISOString(),
-                    'Connection': 'close'
-                });
-            }
-
-            res.end();
         }
         else{
             this.route(req.method, req.url)
