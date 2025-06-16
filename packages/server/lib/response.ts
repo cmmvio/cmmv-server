@@ -1158,8 +1158,11 @@ export default {
         let body = '';
 
         if (schema) {
-            const stringify = fastJson(schema);
-            body = stringify(obj);
+            try{
+                body = schema(obj);
+            } catch (err) {
+                body = this.stringify(obj, replacer, spaces, escape);
+            }
         } else {
             body = this.stringify(obj, replacer, spaces, escape);
         }
